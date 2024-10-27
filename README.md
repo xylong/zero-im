@@ -41,7 +41,16 @@ $ docker push registry.cn-hangzhou.aliyuncs.com/easy-chat/user-rpc-test:latest
 
 ### 命令
 ```makefile
-# 执行Makefile中的release-test命令
+# 查看本机ip，方便配置etcd的宿主机ip
+ifconfig | grep "inet " | awk '{print $2}'
+
+# 执行Makefile中的release-test命令，编译二进制文件，构建镜像推送到阿里云镜像仓库
 make release-test
+
+# 构建运行环境：mysql+redis+redis
+docker-compose up -d
+
+# 删除所有运行容器后重新拉取镜像运行
+install-server
 ```
 
