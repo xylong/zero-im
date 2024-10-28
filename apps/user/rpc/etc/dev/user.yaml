@@ -4,3 +4,21 @@ Etcd:
   Hosts:
   - 192.168.2.24:3379
   Key: user.rpc
+
+Mysql:
+  DSN: root:easy-chat@tcp(192.168.2.24:13306)/im?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  Debug: true
+  ConnMaxLifetime: 10
+  MaxIdleConns: 5
+  MaxOpenConns: 5
+  SkipDefaultTransaction: true
+  SingularTable: false
+
+Cache:
+  - Host: 192.168.2.24:16379
+    Type: node
+    Pass: easy-chat
+
+Jwt:
+  AccessSecret: easy-chat
+  AccessExpire: 86400
