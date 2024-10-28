@@ -14,6 +14,9 @@ type UserDao interface {
 
 	// FindByPhone 根据手机号查询用户
 	FindByPhone(phone string) (*model.User, error)
+
+	ListByName(name string) ([]*model.User, error)
+	ListByIds(ids []string) ([]*model.User, error)
 }
 
 type userDao struct {
@@ -52,4 +55,30 @@ func (d *userDao) FindByPhone(phone string) (*model.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (d *userDao) ListByName(name string) ([]*model.User, error) {
+	var (
+		err   error
+		users []*model.User
+	)
+
+	if err = d.db.Where("nickname like ?", "%"+name+"%").Find(&users).Error; err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
+func (d *userDao) ListByIds(ids []string) ([]*model.User, error) {
+	var (
+		err   error
+		users []*model.User
+	)
+
+	if err = d.db.Where("id in ?", ids).Find(&users).Error; err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }

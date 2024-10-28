@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"zero-im/apps/user/model"
 
 	"zero-im/apps/user/rpc/internal/svc"
 	"zero-im/apps/user/rpc/user"
@@ -24,7 +26,29 @@ func NewFindUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUser
 }
 
 func (l *FindUserLogic) FindUser(in *user.FindUserReq) (*user.FindUserResp, error) {
-	// todo: add your logic here and delete this line
+	var (
+		err   error
+		users []*model.User
+	)
 
-	return &user.FindUserResp{}, nil
+	if in.Phone != "" {
+		userEntity, err := l.svcCtx.UserDao.FindByPhone(in.Phone)
+		if err == nil {
+			users = append(users, userEntity)
+		}
+	} else if in.Name != "" {
+		users, err = l.svcCtx.UserDao.ListByName(in.Name)
+	} else if len(in.Ids) > 0 {
+		users, err = l.svcCtx.UserDao.ListByIds(in.Ids)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	var resp []*user.UserEntity
+	copier.Copy(&resp, users)
+	return &user.FindUserResp{
+		User: resp,
+	}, err
 }
