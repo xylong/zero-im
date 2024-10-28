@@ -7,6 +7,7 @@ import (
 	"time"
 	"zero-im/pkg/ctxdata"
 	"zero-im/pkg/encrypt"
+	"zero-im/pkg/xerr"
 
 	"zero-im/apps/user/rpc/internal/svc"
 	"zero-im/apps/user/rpc/user"
@@ -15,8 +16,8 @@ import (
 )
 
 var (
-	ErrPhoneNotRegister = errors.New("手机号没有注册")
-	ErrUserPwdError     = errors.New("密码错误")
+	ErrPhoneNotRegister = xerr.New(xerr.SERVER_COMMON_ERROR, "手机号没有注册")
+	ErrUserPwdError     = xerr.New(xerr.SERVER_COMMON_ERROR, "密码错误")
 )
 
 type LoginLogic struct {
@@ -39,7 +40,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithStack(ErrPhoneNotRegister)
 		}
-		return nil, ErrPhoneNotRegister
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find user by phone err %v , req %v", err, in.Phone)
 	}
 
 	if !encrypt.ValidatePasswordHash(in.Password, userEntity.Password) {
@@ -50,7 +51,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire,
 		userEntity.ID)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "ctxdata get jwt token err %v", err)
 	}
 
 	return &user.LoginResp{
