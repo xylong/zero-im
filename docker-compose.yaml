@@ -5,8 +5,8 @@ services:
     image: bitnami/etcd:3.5.15
     container_name: etcd
     ports:
-      - "3379:2379"
-      - "3380:2380"
+      - "2379:2379"
+      - "2380:2380"
     environment:
       - ETCD_ENABLE_V2=true
       - ALLOW_NONE_AUTHENTICATION=yes
@@ -22,7 +22,7 @@ services:
   redis:
     image: redis:alpine3.18
     ports:
-      - 16379:6379
+      - 6379:6379
     container_name: redis_alpine
     volumes:
       - ./components/redis/data:/data
@@ -37,7 +37,7 @@ services:
   mysql:
     image: bitnami/mysql:5.7.43
     ports:
-      - 13306:3306
+      - 3306:3306
     container_name: mysql57
     volumes:
       - ./components/mysql/data:/var/lib/mysql
