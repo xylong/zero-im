@@ -2,7 +2,7 @@ Name: user.rpc
 ListenOn: 0.0.0.0:10000
 Etcd:
   Hosts:
-    - 127.0.01:2379
+    - 127.0.0.1:2379
   Key: user.rpc
 
 Mysql:
@@ -20,5 +20,5 @@ Cache:
     Pass: easy-chat
 
 Jwt:
-  AccessSecret: easy-chat
+  AccessSecret: go-zero-im
   AccessExpire: 86400

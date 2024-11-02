@@ -13,5 +13,5 @@ type Config struct {
 		//AccessExpire int64
 	}
 
-	UserRpcClientConf zrpc.RpcClientConf // user rpc 客户端配置
+	UserRpc zrpc.RpcClientConf // user rpc 客户端配置
 }
