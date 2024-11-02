@@ -54,7 +54,7 @@ message GetUserInfoResp {
   UserEntity user = 1;
 }
 
-message FindUserReq {
+message  FindUserReq {
   string name = 1;
   string phone = 2;
   repeated string ids = 3;
