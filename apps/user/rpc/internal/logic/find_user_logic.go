@@ -3,10 +3,9 @@ package logic
 import (
 	"context"
 	"github.com/jinzhu/copier"
-	"zero-im/apps/user/model"
-
 	"zero-im/apps/user/rpc/internal/svc"
 	"zero-im/apps/user/rpc/user"
+	"zero-im/models"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -28,7 +27,7 @@ func NewFindUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUser
 func (l *FindUserLogic) FindUser(in *user.FindUserReq) (*user.FindUserResp, error) {
 	var (
 		err   error
-		users []*model.User
+		users []*models.User
 	)
 
 	if in.Phone != "" {

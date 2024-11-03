@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
 	"time"
-	"zero-im/apps/user/model"
+	"zero-im/models"
 	"zero-im/pkg/ctxdata"
 	"zero-im/pkg/encrypt"
 	"zero-im/pkg/wuid"
@@ -48,7 +48,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 
 	password, _ := encrypt.GenPasswordHash([]byte(in.Password))
 
-	userEntity = &model.User{
+	userEntity = &models.User{
 		ID:       wuid.GenUid(l.svcCtx.Config.Mysql.DSN),
 		Avatar:   in.Avatar,
 		Nickname: in.Nickname,

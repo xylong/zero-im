@@ -1,0 +1,20 @@
+Name: social.rpc
+ListenOn: 0.0.0.0:10001
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: social.rpc
+
+Mysql:
+  DSN: root:easy-chat@tcp(127.0.0.1:3306)/im?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  Debug: true
+  ConnMaxLifetime: 10
+  MaxIdleConns: 5
+  MaxOpenConns: 5
+  SkipDefaultTransaction: true
+  SingularTable: false
+
+Cache:
+  - Host: 192.168.2.24:16379
+    Type: node
+    Pass: easy-chat

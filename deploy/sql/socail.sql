@@ -10,15 +10,18 @@ CREATE TABLE `friends` (
 
 CREATE TABLE `friend_requests` (
                                    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                                   `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
-                                   `req_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
-                                   `req_msg` varchar(255) DEFAULT NULL,
-                                   `req_time` timestamp  NOT NULL,
-                                   `handle_result`  tinyint COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-                                   `handle_msg` varchar(255) DEFAULT NULL,
-                                   `handled_at`timestamp NULL DEFAULT NULL,
+                                   `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户id',
+                                   `req_uid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '申请好友id',
+                                   `req_msg` varchar(255) NOT NULL DEFAULT '' COMMENT '请求信息',
+                                   `req_time` timestamp NOT NULL COMMENT '请求时间',
+                                   `handle_result` tinyint(4) NOT NULL DEFAULT '1' COMMENT '处理结果：1-未处理 2-通过 3-拒绝 4-取消 ',
+                                   `handle_msg` varchar(255) NOT NULL DEFAULT '' COMMENT '处理结果信息',
+                                   `handled_at` timestamp NULL DEFAULT NULL COMMENT '处理时间',
+                                   `created_at` timestamp NOT NULL COMMENT '创建时间',
+                                   `updated_at` timestamp NOT NULL COMMENT '更新时间',
+                                   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
                                    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '好友申请表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='好友申请表'
 
 CREATE TABLE `groups` (
                           `id` varchar(24) COLLATE utf8mb4_unicode_ci  NOT NULL ,
