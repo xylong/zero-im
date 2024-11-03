@@ -2,8 +2,9 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
-	"github.com/spf13/cast"
 	"gorm.io/gorm"
 	"time"
 	"zero-im/models"
@@ -35,7 +36,7 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 
 	// 申请人是否与目标是好友关系
 	friends, err := l.svcCtx.FriendDao.FindByUidAndFid(in.UserId, in.ReqUid)
-	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find friends by uid and fid err %v req %v ", err, in)
 	}
 	if friends != nil {
@@ -44,10 +45,12 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 
 	// 是否已经有过申请，申请是不成功，没有完成
 	friendReqs, err := l.svcCtx.FriendRequestDao.FindByReqUidAndUserId(in.ReqUid, in.UserId)
-	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find friendsRequest by rid and uid err %v req %v ", err, in)
 	}
-	if friendReqs != nil {
+	if friendReqs != nil && len(friendReqs) > 0 {
+		t, _ := json.Marshal(friendReqs)
+		fmt.Println(string(t))
 		return &social.FriendPutInResp{}, err
 	}
 
@@ -57,7 +60,7 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 		ReqUID:       in.ReqUid,
 		ReqMsg:       in.ReqMsg,
 		ReqTime:      time.Unix(in.ReqTime, 0),
-		HandleResult: cast.ToInt64(constants.NoHandlerResult),
+		HandleResult: int64(constants.NoHandlerResult),
 	})
 
 	if err != nil {
