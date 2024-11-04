@@ -51,6 +51,6 @@ make release-test
 docker-compose up -d
 
 # 删除所有运行容器后重新拉取镜像运行
-install-server
+make install-server
 ```
 
