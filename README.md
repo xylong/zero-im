@@ -54,3 +54,9 @@ docker-compose up -d
 make install-server
 ```
 
+### jaeger
+```shell
+go get github.com/opentracing/opentracing-go
+go get github.com/uber/jaeger-client-go
+
+```
